@@ -21,13 +21,14 @@ class ContentVM: ObservableObject {
 // TextView Scan관련
 extension ContentVM {
     // import Vision // Text 뽑아오는게 있내 <-- 필수
-    // Text 빼오는거 샘플
+    // 1. Text 빼오는거 샘플
     func detectText(_ image: UIImage) {
         guard let image = image.cgImage else {
             print("Invalid image")
             return
         }
         
+        // 2. VNRecognizeTextRequest 준비
         let request = VNRecognizeTextRequest { (request, error) in
             if let error = error {
                 print("Error detecting text: \(error)")
@@ -37,13 +38,19 @@ extension ContentVM {
             }
         }
         
-        request.recognitionLanguages = ["ko_KR"] // 기본이 영어 이며, 한국어는 꼭 넣어줘야함
+        /*
+         recognitionLanguages 를 포함하지 않으면, 기본적으로 영어임.
+         한국어를 포함할꺼면 꼭 ko_KR 넣어줘야함.
+         , "cn", "jp"
+         */
+        request.recognitionLanguages = ["ko_KR"]
         request.recognitionLevel = .accurate
         
-        // 요청 행위
+        // 2-1. VNRecognizeTextRequest 요청 행위
         performDetection(request: request, image: image)
     }
     
+    // 3. VNRecognizeTextRequest 결과 분석 후 Model에 저장
     func handleDetectionResults(results: [Any]?, image:CGImage) {
         guard let results = results, results.count > 0 else {
             print("No text found")
@@ -63,7 +70,7 @@ extension ContentVM {
                     print(observation.boundingBox)
                     print("\n")
                 
-                    
+                    // Vision 에서 비율로 준 boundingBox 값을 이미지 크기에 맞게 변환
                     let rect = VNImageRectForNormalizedRect(observation.boundingBox,
                                                             Int(image.width),
                                                             Int(image.height))
@@ -71,6 +78,7 @@ extension ContentVM {
                     print("\n")
                     print("\n")
                     
+                    // 모델에 필요한 값 저장해놓기
                     let info = JWScanTextItems()
                     info.text = text.string
                     info.rect = rect
@@ -86,6 +94,7 @@ extension ContentVM {
         }
     }
     
+    // 요청 행위
     func performDetection(request: VNRecognizeTextRequest, image: CGImage) {
         let requests = [request]
         

@@ -86,9 +86,12 @@ struct ContentView: View {
                                         let width = (info.rect.width / widthScale)
                                         let height = (info.rect.height / heightScale)
                                         
+                                        // X 값 = 비율 변환 후 + (Box가로크기/2)
                                         let positionX = (info.rect.origin.x / widthScale) + (width / 2)
+                                        // Y 값 = 이미지크기 - (Y값 비율변환 후 + Box높이크기/2)
                                         let positionY = proxySize.height - (info.rect.origin.y / heightScale) - (height / 2)
                                         
+                                        // Rect 그리기.
                                         JWOCRTextRectPath()
                                             .frame(width: width, height: height)
                                             .foregroundColor(.blue.opacity(value))
@@ -106,7 +109,7 @@ struct ContentView: View {
                         .padding()
                         .foregroundColor(.white)
                         .background(.red)
-                        .clipShape(Capsule())                        
+                        .clipShape(Capsule())
                 }
             }
         }

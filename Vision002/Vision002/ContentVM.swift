@@ -37,7 +37,7 @@ extension ContentVM {
             }
         }
         
-        request.recognitionLanguages = ["ko_KR", "cn"] // 기본이 영어 이며, 한국어는 꼭 넣어줘야함
+        request.recognitionLanguages = ["ko_KR"] // 기본이 영어 이며, 한국어는 꼭 넣어줘야함
         request.recognitionLevel = .accurate
         
         // 요청 행위
@@ -74,13 +74,9 @@ extension ContentVM {
                     let info = JWScanTextItems()
                     info.text = text.string
                     info.rect = rect
-//                    texts.append(text.string) // 이름 값들 넣어놓기.
-//                    rects.append(rect) // 좌표값 넣어놓기.
                     textInfos.append(info)
-                    // break // 테스트좀 (하나만)
                 }
             }
-            // break // 테스트좀 (하나만)
         }
         
         // 데이터 넣어주기
